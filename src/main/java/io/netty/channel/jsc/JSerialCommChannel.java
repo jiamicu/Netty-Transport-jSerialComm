@@ -16,7 +16,9 @@
 package io.netty.channel.jsc;
 
 import com.fazecast.jSerialComm.SerialPort;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOutboundBuffer;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.oio.OioByteStreamChannel;
 
@@ -70,7 +72,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
         }
 
         commPort.setComPortTimeouts(
-                SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, config().getOption(READ_TIMEOUT), 0);
+                SerialPort.TIMEOUT_NONBLOCKING, config().getOption(READ_TIMEOUT), 0);
 
         deviceAddress = remote;
         serialPort = commPort;
