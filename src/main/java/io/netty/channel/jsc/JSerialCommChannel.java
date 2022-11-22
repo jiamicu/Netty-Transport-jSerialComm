@@ -71,8 +71,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
             throw new IOException("Could not open port: " + remote.value());
         }
 
-        commPort.setComPortTimeouts(
-                SerialPort.TIMEOUT_NONBLOCKING, config().getOption(READ_TIMEOUT), 0);
+        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0)
 
         deviceAddress = remote;
         serialPort = commPort;
