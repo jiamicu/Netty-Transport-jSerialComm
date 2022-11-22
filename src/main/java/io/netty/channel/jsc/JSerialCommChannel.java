@@ -70,7 +70,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
         }
 
         commPort.setComPortTimeouts(
-                SerialPort.TIMEOUT_READ_BLOCKING, config().getOption(READ_TIMEOUT), 0);
+                SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, config().getOption(READ_TIMEOUT), 0);
 
         deviceAddress = remote;
         serialPort = commPort;
