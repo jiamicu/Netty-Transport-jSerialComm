@@ -38,7 +38,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
 
     private final JSerialCommChannelConfig config;
 
-    private boolean open = true;
+    private boolean open = false;
     private JSerialCommDeviceAddress deviceAddress;
     private SerialPort serialPort;
 
@@ -70,8 +70,8 @@ public class JSerialCommChannel extends OioByteStreamChannel {
         if (!commPort.openPort()) {
             throw new IOException("Could not open port: " + remote.value());
         }
-
-        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+        open = true;
+        commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, config().getOption(READ_TIMEOUT), 0);
 
         deviceAddress = remote;
         serialPort = commPort;
@@ -147,7 +147,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
         public void connect(
                 final SocketAddress remoteAddress,
                 final SocketAddress localAddress, final ChannelPromise promise) {
-            if (!promise.setUncancellable() || !isOpen()) {
+            if (!promise.setUncancellable() || !ensureOpen(promise)) {
                 return;
             }
 
